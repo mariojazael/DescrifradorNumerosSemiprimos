@@ -17,11 +17,12 @@ public class MiClaseRemota extends UnicastRemoteObject implements MiInterfazRemo
     @Serial
     private static final long serialVersionUID = -6044598747301230549L;
     private final AtomicInteger contador = new AtomicInteger();
-    static int prueba = 1111111;
-    static int pruebaFinal = prueba / 2;
+    static int prueba = 353 * 353
+            ;
+    static int pruebaFinal = prueba / 4;
     int sliceSize = pruebaFinal / 2;
     public static AtomicInteger limiteInferior = new AtomicInteger(0);
-    public AtomicInteger limiteSuperior = new AtomicInteger(sliceSize);
+    public AtomicInteger limiteSuperior = new AtomicInteger(prueba);
 
     public MiClaseRemota() throws RemoteException {
         contador.set(0);
@@ -29,14 +30,15 @@ public class MiClaseRemota extends UnicastRemoteObject implements MiInterfazRemo
 
     public Respuesta miMetodo1() throws RemoteException {
 // Aquí ponemos el código que queramos
-        contador.incrementAndGet();
+        int contadorEstatico = contador.incrementAndGet();
         System.out.println(contador.get());
+
         while(contador.get() <= 1){}
 
         Integer [] parametros = {limiteInferior.get(), limiteSuperior.get(), prueba};
 
-        limiteInferior.set(limiteInferior.get() + sliceSize);
-        limiteSuperior.set(limiteSuperior.get() + sliceSize);
+        // limiteInferior.set(limiteInferior.get() + sliceSize);
+        // limiteSuperior.set(limiteSuperior.get() + sliceSize);
 
         SerializableFunction<Integer [], HashMap<Boolean, String>> function = (a) -> {
             int recorrido = a[1] - a[0];
@@ -47,7 +49,7 @@ public class MiClaseRemota extends UnicastRemoteObject implements MiInterfazRemo
             for(int k = 0; k < 4; k++){
                 int finalK = k;
                 executorService.submit(()->{
-                    for(int i = a[0] + finalK * recorrido; i < (a[0] * finalK + recorrido) + recorrido; i++){
+                    for(int i = (a[0] + finalK * recorrido) + contadorEstatico; i < (a[0] * finalK + recorrido) + recorrido; i = i + 2){
                         if(isPrime(i)) {
                             for(int j = 0; j < a[1]; j++){
                                 if(isSemiprime.get()) break;
