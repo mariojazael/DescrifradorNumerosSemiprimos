@@ -13,11 +13,11 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class MiClaseRemota extends UnicastRemoteObject implements MiInterfazRemota {
     private final AtomicInteger contador = new AtomicInteger();
-    static int prueba = 100000;
+    static int prueba = 1111111;
     static int pruebaFinal = prueba / 2;
     int sliceSize = pruebaFinal / 2;
-    AtomicInteger limiteInferior = new AtomicInteger(0);
-    AtomicInteger limiteSuperior = new AtomicInteger(sliceSize);
+    public static AtomicInteger limiteInferior = new AtomicInteger(0);
+    public AtomicInteger limiteSuperior = new AtomicInteger(sliceSize);
 
     public MiClaseRemota() throws RemoteException {
         contador.set(0);
@@ -72,7 +72,6 @@ public class MiClaseRemota extends UnicastRemoteObject implements MiInterfazRemo
             // isSemiprime.set(false);
             return hashMap;
         };
-
         return new Respuesta(parametros, function);
     }
 
@@ -91,7 +90,7 @@ public class MiClaseRemota extends UnicastRemoteObject implements MiInterfazRemo
 
 
     public static void main(String[] args) throws RemoteException {
-        System.out.println(prueba);
+        System.out.println(args[0] );
         try {
             Registry registry = LocateRegistry.createRegistry(
                     Integer.parseInt(args[0]));
