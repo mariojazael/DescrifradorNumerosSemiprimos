@@ -21,7 +21,7 @@ public class MiClienteRMI {
             System.out.println(Arrays.toString(respuesta.parametros));
 
             HashMap<Boolean, String> hashMap = respuesta.getFuncion().apply(respuesta.parametros);
-            System.out.println(Arrays.toString(respuesta.parametros));
+
             long endTime = System.currentTimeMillis();
             if(hashMap.containsKey(true)) {
                 hashMap.put(true, hashMap.get(true) + " " + (endTime - startTime) + " milisegundos");

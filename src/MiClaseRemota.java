@@ -17,8 +17,7 @@ public class MiClaseRemota extends UnicastRemoteObject implements MiInterfazRemo
     @Serial
     private static final long serialVersionUID = -6044598747301230549L;
     private final AtomicInteger contador = new AtomicInteger();
-    static int prueba = 353 * 353
-            ;
+    static int prueba = 30000;
     static int pruebaFinal = prueba / 4;
     int sliceSize = pruebaFinal / 2;
     public static AtomicInteger limiteInferior = new AtomicInteger(0);
@@ -35,7 +34,7 @@ public class MiClaseRemota extends UnicastRemoteObject implements MiInterfazRemo
 
         while(contador.get() <= 1){}
 
-        Integer [] parametros = {limiteInferior.get(), limiteSuperior.get(), prueba};
+        Integer [] parametros = {limiteInferior.get(), limiteSuperior.get(), prueba, contadorEstatico};
 
         // limiteInferior.set(limiteInferior.get() + sliceSize);
         // limiteSuperior.set(limiteSuperior.get() + sliceSize);
@@ -49,7 +48,7 @@ public class MiClaseRemota extends UnicastRemoteObject implements MiInterfazRemo
             for(int k = 0; k < 4; k++){
                 int finalK = k;
                 executorService.submit(()->{
-                    for(int i = (a[0] + finalK * recorrido) + contadorEstatico; i < (a[0] * finalK + recorrido) + recorrido; i = i + 2){
+                    for(int i = (a[0] + finalK * recorrido) + a[3]; i < (a[0] * finalK + recorrido) + recorrido; i = i + 2){
                         if(isPrime(i)) {
                             for(int j = 0; j < a[1]; j++){
                                 if(isSemiprime.get()) break;
