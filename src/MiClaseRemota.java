@@ -1,4 +1,6 @@
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.rmi.server.UnicastRemoteObject;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -11,7 +13,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class MiClaseRemota extends UnicastRemoteObject implements MiInterfazRemota {
+public class MiClaseRemota extends UnicastRemoteObject implements MiInterfazRemota, Serializable {
+    @Serial
+    private static final long serialVersionUID = -6044598747301230549L;
     private final AtomicInteger contador = new AtomicInteger();
     static int prueba = 1111111;
     static int pruebaFinal = prueba / 2;

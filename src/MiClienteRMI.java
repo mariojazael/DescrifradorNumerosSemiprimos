@@ -12,6 +12,8 @@ public class MiClienteRMI {
 
 // Imprimimos miMetodo1() tantas veces como devuelva miMetodo2()
 
+            // mir.miMetodo2(" Mario");
+
             Respuesta respuesta = mir.miMetodo1();
 
             long startTime = System.currentTimeMillis();
