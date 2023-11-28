@@ -27,3 +27,5 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+/MiInterfazRemota1/nbproject/private/
+/MiInterfazRemota1/build/

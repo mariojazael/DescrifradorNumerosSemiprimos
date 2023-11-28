@@ -1,7 +1,10 @@
+package Controller;
+
+import View.MainJframe;
+
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.function.Function;
 
 public class Respuesta implements Serializable {
     @Serial
@@ -9,6 +12,7 @@ public class Respuesta implements Serializable {
 
     Integer [] parametros;
     SerializableFunction<Integer[], HashMap<Boolean, String>> funcion;
+    MainJframe mainJframe;
 
     public Respuesta(Integer[] parametros, SerializableFunction<Integer[], HashMap<Boolean, String>> funcion) {
         this.parametros = parametros;
