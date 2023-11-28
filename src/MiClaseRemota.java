@@ -17,7 +17,48 @@ public class MiClaseRemota extends UnicastRemoteObject implements MiInterfazRemo
     @Serial
     private static final long serialVersionUID = -6044598747301230549L;
     private final AtomicInteger contador = new AtomicInteger();
-    static int prueba = 30000;
+    SerializableFunction<Integer [], HashMap<Boolean, String>> function = (a) -> {
+        int recorrido = a[1] - a[0];
+        int sliceSize = recorrido / 4;
+        AtomicBoolean isSemiprime = new AtomicBoolean(false);
+        ExecutorService executorService = Executors.newFixedThreadPool(4);
+        AtomicReference<String> result = new AtomicReference<>("");
+        for(int k = 0; k < 4; k++){
+            int finalK = k;
+            int y = (a[0] + finalK * sliceSize) + a[3];
+            int x = (a[0] + finalK * sliceSize) + sliceSize;
+            System.out.println(y + " " + x);
+            executorService.submit(()->{
+                for(int i = (a[0] + finalK * sliceSize) + a[3]; i < (a[0] + finalK * sliceSize) + sliceSize; i = i + 2){
+                    if(isPrime(i)) {
+                        for(int j = 0; j < a[1]; j++){
+                            if(isSemiprime.get()) break;
+                            if(isPrime(j)){
+                                if(i * j == a[2] && i > 1 && j > 1) {
+                                    isSemiprime.set(true);
+                                    result.set(i + " * " + j);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    if(isSemiprime.get()) break;
+                }
+            });
+        }
+
+        executorService.shutdown();
+        while(!executorService.isTerminated()){
+            if(isSemiprime.get()) executorService.shutdownNow();
+        }
+
+        HashMap<Boolean, String> hashMap = new HashMap<>();
+        hashMap.put(isSemiprime.get(), result.get());
+
+        // isSemiprime.set(false);
+        return hashMap;
+    };
+    static int prueba = 20000;
     static int pruebaFinal = prueba / 4;
     int sliceSize = pruebaFinal / 2;
     public static AtomicInteger limiteInferior = new AtomicInteger(0);
@@ -39,44 +80,6 @@ public class MiClaseRemota extends UnicastRemoteObject implements MiInterfazRemo
         // limiteInferior.set(limiteInferior.get() + sliceSize);
         // limiteSuperior.set(limiteSuperior.get() + sliceSize);
 
-        SerializableFunction<Integer [], HashMap<Boolean, String>> function = (a) -> {
-            int recorrido = a[1] - a[0];
-            int sliceSize = recorrido / 4;
-            AtomicBoolean isSemiprime = new AtomicBoolean(false);
-            ExecutorService executorService = Executors.newFixedThreadPool(4);
-            AtomicReference<String> result = new AtomicReference<>("");
-            for(int k = 0; k < 4; k++){
-                int finalK = k;
-                executorService.submit(()->{
-                    for(int i = (a[0] + finalK * recorrido) + a[3]; i < (a[0] * finalK + recorrido) + recorrido; i = i + 2){
-                        if(isPrime(i)) {
-                            for(int j = 0; j < a[1]; j++){
-                                if(isSemiprime.get()) break;
-                                if(isPrime(j)){
-                                    if(i * j == a[2] && i > 1 && j > 1) {
-                                        isSemiprime.set(true);
-                                        result.set(i + " * " + j);
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                        if(isSemiprime.get()) break;
-                    }
-                });
-            }
-
-            executorService.shutdown();
-            while(!executorService.isTerminated()){
-                if(isSemiprime.get()) executorService.shutdownNow();
-            }
-
-            HashMap<Boolean, String> hashMap = new HashMap<>();
-            hashMap.put(isSemiprime.get(), result.get());
-
-            // isSemiprime.set(false);
-            return hashMap;
-        };
         return new Respuesta(parametros, function);
     }
 
